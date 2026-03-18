@@ -1,0 +1,449 @@
+/* ========================================
+   CONVERT PAGE
+======================================== */
+.convert-page {
+    padding: 40px 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: calc(100vh - 70px);
+  }
+  
+  .convert-loading,
+  .convert-error {
+    text-align: center;
+    padding: 60px 20px;
+    color: white;
+  }
+  
+  .convert-error h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .convert-error p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+  }
+
+/* ========================================
+   PAGE WRAPPER (для фону)
+======================================== */
+.convert-page-wrapper {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+  }
+  
+  /* Background Layer */
+  .convert-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  /* ========================================
+     CONVERT PAGE (поверх фону)
+  ======================================== */
+  .convert-page {
+    position: relative;
+    z-index: 1;
+    padding: 40px 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: calc(100vh - 70px);
+  }
+  
+  /* ========================================
+     LIVE BADGE
+  ======================================== */
+  .live-badge {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 12px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  
+  /* ========================================
+     CONTAINER
+  ======================================== */
+  .convert-container {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px;
+  }
+  
+  .convert-title {
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .convert-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  /* ========================================
+     CONTENT LAYOUT
+  ======================================== */
+  .convert-content {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 30px;
+  }
+  
+  /* ========================================
+     FORM SECTION
+  ======================================== */
+  .convert-form-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .convert-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .convert-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .convert-label {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .convert-select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .convert-select:focus {
+    border-color: rgba(102, 126, 234, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  
+  .convert-select option {
+    background: #1a1a2e;
+    color: white;
+    padding: 10px;
+  }
+  
+  .convert-amount-wrapper {
+    position: relative;
+  }
+  
+  .convert-input {
+    width: 100%;
+    padding: 14px 60px 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  .convert-input:focus {
+    border-color: rgba(102, 126, 234, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  
+  .convert-currency-badge {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .convert-balance-hint {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  /* ========================================
+     SWAP BUTTON
+  ======================================== */
+  .convert-swap-container {
+    display: flex;
+    justify-content: center;
+    margin: -10px 0;
+  }
+  
+  .convert-swap-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(102, 126, 234, 0.2);
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .convert-swap-button:hover:not(:disabled) {
+    background: rgba(102, 126, 234, 0.3);
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: rotate(180deg);
+  }
+  
+  .convert-swap-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* ========================================
+     RESULT DISPLAY
+  ======================================== */
+  .convert-result-display {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 14px 16px;
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 12px;
+  }
+  
+  .convert-result-amount {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  .convert-result-currency {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  /* ========================================
+     SUBMIT BUTTON
+  ======================================== */
+  .convert-submit-button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+  
+  .convert-submit-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  }
+  
+  .convert-submit-button:disabled {
+    background: rgba(102, 126, 234, 0.3);
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  /* ========================================
+     INFO SECTION
+  ======================================== */
+  .convert-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .convert-rate-card,
+  .convert-details-card,
+  .convert-tips-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .convert-rate-title,
+  .convert-details-title,
+  .convert-tips-title {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .convert-rate-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .convert-rate-from,
+  .convert-rate-to {
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .convert-rate-equals {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+  }
+  
+  .convert-rate-update {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  /* ========================================
+     DETAILS CARD
+  ======================================== */
+  .convert-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .convert-details-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .convert-details-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+  }
+  
+  .convert-details-value {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .convert-details-commission {
+    color: rgba(255, 193, 7, 0.9);
+  }
+  
+  .convert-details-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 8px 0;
+  }
+  
+  .convert-details-total .convert-details-label {
+    font-weight: 600;
+    color: white;
+  }
+  
+  .convert-details-total .convert-details-value {
+    font-size: 18px;
+    color: #4ade80;
+  }
+  
+  /* ========================================
+     TIPS CARD
+  ======================================== */
+  .convert-tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .convert-tips-list li {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    padding-left: 20px;
+    position: relative;
+  }
+  
+  .convert-tips-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #4ade80;
+    font-weight: bold;
+  }
+  
+  /* ========================================
+     RESPONSIVE
+  ======================================== */
+  @media (max-width: 968px) {
+    .convert-content {
+      grid-template-columns: 1fr;
+    }
+  
+    .convert-container {
+      padding: 25px;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .convert-page {
+      padding: 20px 15px;
+    }
+  
+    .convert-title {
+      font-size: 24px;
+    }
+  
+    .convert-subtitle {
+      font-size: 14px;
+    }
+  }

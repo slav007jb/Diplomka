@@ -1,0 +1,146 @@
+/* Контейнер страницы */
+.register-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  /* Форма регистрации */
+  .register-container {
+    max-width: 420px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 40px 35px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+  
+  /* Заголовок */
+  .register-header {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  /* Подзаголовок */
+  .register-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+  }
+  
+  /* Сообщения */
+  .message {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    text-align: center;
+  }
+  
+  .message-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ff6b6b;
+  }
+  
+  .message-success {
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    color: #4ade80;
+  }
+  
+  /* Поля формы */
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group:last-of-type {
+    margin-bottom: 25px;
+  }
+  
+  .form-label {
+    color: white;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  .form-input:focus {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  
+  .form-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .form-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Кнопка */
+  .submit-button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
+  }
+  
+  .submit-button:disabled {
+    background: rgba(102, 126, 234, 0.5);
+    cursor: not-allowed;
+  }
+  
+  /* Ссылка внизу */
+  .register-footer {
+    margin-top: 25px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+  }
+  
+  .register-footer-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .register-footer-link:hover {
+    text-decoration: underline;
+  }
