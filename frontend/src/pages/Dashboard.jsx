@@ -511,7 +511,7 @@ function Dashboard() {
                     <label className="form-label">Спосіб оплати</label>
                     <div className="payment-options">
                       <div className={`payment-card ${paymentMethod === 'visa' ? 'payment-card-active' : ''}`} onClick={() => setPaymentMethod('visa')}>
-                        <div className="payment-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" /></div>
+                        <div className="payment-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Visa_Inc._logo_%282021%E2%80%93present%29.svg" alt="Visa" /></div>
                         <span className="payment-name">Visa</span>
                       </div>
                       <div className={`payment-card ${paymentMethod === 'mastercard' ? 'payment-card-active' : ''}`} onClick={() => setPaymentMethod('mastercard')}>

@@ -11,43 +11,89 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  // Загружаем тему из localStorage или ставим чёрную по умолчанию
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('app-theme');
     return savedTheme || 'dark';
   });
 
-  // Сохраняем тему при изменении
+  // Применяем CSS переменные при смене темы
   useEffect(() => {
     localStorage.setItem('app-theme', theme);
+    
+    const themesColors = {
+      dark: {
+        // Тёмная тема
+        '--bg-primary': '#000000',
+        '--bg-secondary': '#0a0a0a',
+        '--bg-card': '#111111',
+        '--bg-hover': '#1a1a1a',
+        '--text-primary': '#ffffff',
+        '--text-secondary': '#cccccc',
+        '--text-muted': '#888888',
+        '--border-color': '#222222',
+        '--border-hover': '#333333',
+        '--accent-primary': '#667eea',
+        '--accent-secondary': '#764ba2',
+        '--accent-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        '--accent-glow': 'rgba(102, 126, 234, 0.4)',
+        '--success': '#00ff9d',
+        '--error': '#ff4444',
+        '--withdraw': '#ff6b6b',
+        '--withdraw-gradient': 'linear-gradient(135deg, #ff6b6b 0%, #ff4444 100%)',
+        '--modal-bg': '#0a0a0a',
+        '--particles': '#ffffff'
+      },
+      gray: {
+        // Серая тема
+        '--bg-primary': '#1a1a1a',
+        '--bg-secondary': '#242424',
+        '--bg-card': '#2a2a2a',
+        '--bg-hover': '#353535',
+        '--text-primary': '#e5e5e5',
+        '--text-secondary': '#b0b0b0',
+        '--text-muted': '#7a7a7a',
+        '--border-color': '#333333',
+        '--border-hover': '#444444',
+        '--accent-primary': '#8b5cf6',
+        '--accent-secondary': '#7c3aed',
+        '--accent-gradient': 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+        '--accent-glow': 'rgba(139, 92, 246, 0.4)',
+        '--success': '#52c41a',
+        '--error': '#ff4d4f',
+        '--withdraw': '#fa8c16',
+        '--withdraw-gradient': 'linear-gradient(135deg, #fa8c16 0%, #d46b08 100%)',
+        '--modal-bg': '#242424',
+        '--particles': '#b0b0b0'
+      }
+    };
+    
+    const colors = themesColors[theme];
+    const root = document.documentElement;
+    Object.entries(colors).forEach(([key, value]) => {
+      root.style.setProperty(key, value);
+    });
+    
   }, [theme]);
 
-  // Конфигурация тем
   const themes = {
     dark: {
-      name: 'Чорна',
-      background: '#0a0a0a',
+      name: 'Тёмная',
+      background: '#000000',
       particles: '#ffffff',
       icon: '🌙'
     },
     gray: {
-      name: 'Сіра',
-      background: '#2a2a2a',
-      particles: '#e0e0e0',
+      name: 'Серая',
+      background: '#1a1a1a',
+      particles: '#b0b0b0',
       icon: '🌫️'
-    },
-    light: {
-      name: 'Біла',
-      background: '#f5f5f5',
-      particles: '#333333',
-      icon: '☀️'
     }
   };
 
   const currentTheme = themes[theme];
 
   const cycleTheme = () => {
-    const themeOrder = ['dark', 'gray', 'light'];
+    const themeOrder = ['dark', 'gray'];
     const currentIndex = themeOrder.indexOf(theme);
     const nextIndex = (currentIndex + 1) % themeOrder.length;
     setTheme(themeOrder[nextIndex]);

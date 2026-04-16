@@ -4,6 +4,11 @@ import { useTheme } from '../context/ThemeContext';
 function ThemeToggle() {
   const { currentTheme, cycleTheme } = useTheme();
 
+  // Добавляем проверку на случай, если currentTheme еще не загружен
+  if (!currentTheme) {
+    return null;
+  }
+
   return (
     <motion.button
       onClick={cycleTheme}

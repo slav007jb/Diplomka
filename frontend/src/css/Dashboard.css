@@ -1,13 +1,15 @@
-/* ========================================
-   PAGE STRUCTURE
-======================================== */
+/* Dashboard.css - полная замена на CSS переменные */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 .dashboard-page {
   position: relative;
   min-height: 100vh;
   width: 100%;
+  background-color: var(--bg-primary);
 }
 
-/* Background Layer */
 .dashboard-background {
   position: fixed;
   top: 0;
@@ -17,7 +19,6 @@
   z-index: 0;
 }
 
-/* Content Layer */
 .dashboard-container {
   position: relative;
   z-index: 1;
@@ -25,17 +26,13 @@
   width: 100%;
 }
 
-/* ========================================
-   NAVBAR
-======================================== */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-secondary);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
@@ -43,7 +40,10 @@
 }
 
 .navbar-logo {
-  color: white;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   font-size: 20px;
   font-weight: 700;
 }
@@ -52,7 +52,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--accent-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +60,7 @@
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--border-color);
   transition: transform 0.2s ease;
 }
 
@@ -68,9 +68,6 @@
   transform: scale(1.05);
 }
 
-/* ========================================
-   CONTENT WRAPPER
-======================================== */
 .content-wrapper {
   display: flex;
   padding: 30px;
@@ -79,16 +76,12 @@
   margin: 0 auto;
 }
 
-/* ========================================
-   SIDEBAR
-======================================== */
 .sidebar {
   width: 250px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-secondary);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   padding: 20px;
   height: fit-content;
 }
@@ -104,7 +97,7 @@
   gap: 10px;
   padding: 12px 15px;
   margin-bottom: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   text-decoration: none;
   border-radius: 10px;
   font-weight: 500;
@@ -113,12 +106,12 @@
 }
 
 .sidebar-link:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .sidebar-link-active {
-  color: white;
+  color: var(--text-primary);
   background: rgba(102, 126, 234, 0.3);
   border: 1px solid rgba(102, 126, 234, 0.4);
 }
@@ -132,19 +125,16 @@
 }
 
 .sidebar-divider {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
   margin: 15px 0;
 }
 
-/* ========================================
-   MAIN CONTENT
-======================================== */
 .main-content {
   flex: 1;
 }
 
 .page-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -154,36 +144,37 @@
 .error-box {
   text-align: center;
   padding: 40px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-size: 16px;
   border-radius: 15px;
 }
 
 .error-box {
-  color: #ff6b6b;
+  color: var(--error);
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* ========================================
-   WALLETS GRID
-======================================== */
 .wallets-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
 
-/* Wallet Card */
 .wallet-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   padding: 25px;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.wallet-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .wallet-header {
@@ -197,7 +188,7 @@
   width: 50px;
   height: 50px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--accent-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,18 +201,18 @@
 }
 
 .wallet-currency {
-  color: white;
+  color: var(--text-primary);
   font-size: 18px;
   font-weight: 600;
 }
 
 .wallet-label {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   font-size: 12px;
 }
 
 .wallet-amount {
-  color: white;
+  color: var(--text-primary);
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 15px;
@@ -236,7 +227,7 @@
   flex: 1;
   padding: 10px;
   border-radius: 10px;
-  color: white;
+  color: var(--text-primary);
   font-weight: 500;
   font-size: 14px;
   cursor: pointer;
@@ -254,21 +245,43 @@
 }
 
 .wallet-btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
 }
 
 .wallet-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
 }
 
-/* Add Wallet Card */
+.wallet-btn-withdraw {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(251, 113, 133, 0.4);
+  background: rgba(251, 113, 133, 0.12);
+  color: var(--withdraw);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wallet-btn-withdraw:hover:not(:disabled) {
+  background: rgba(251, 113, 133, 0.22);
+  border-color: rgba(251, 113, 133, 0.6);
+}
+
+.wallet-btn-withdraw:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .add-wallet {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-card);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2px dashed var(--border-color);
   padding: 25px;
   display: flex;
   flex-direction: column;
@@ -280,7 +293,7 @@
 }
 
 .add-wallet:hover {
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-primary);
   background: rgba(102, 126, 234, 0.05);
 }
 
@@ -288,18 +301,15 @@
   font-size: 48px;
   margin-bottom: 10px;
   opacity: 0.5;
-  color: white;
+  color: var(--text-primary);
 }
 
 .add-wallet-text {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
 }
 
-/* ========================================
-   MODAL
-======================================== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -308,7 +318,6 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -317,10 +326,9 @@
 }
 
 .modal-box {
-  background: rgba(17, 24, 39, 0.95);
+  background: var(--modal-bg);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 30px;
   max-width: 400px;
@@ -329,7 +337,7 @@
 }
 
 .modal-heading {
-  color: white;
+  color: var(--text-primary);
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -337,7 +345,7 @@
 }
 
 .modal-subheading {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 14px;
   text-align: center;
   margin-bottom: 25px;
@@ -350,11 +358,12 @@
 
 .form-field {
   margin-bottom: 20px;
+  position: relative;
 }
 
 .form-label {
   display: block;
-  color: white;
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 8px;
@@ -364,9 +373,9 @@
   width: 100%;
   padding: 12px 15px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
   font-size: 16px;
   outline: none;
   transition: all 0.3s ease;
@@ -374,8 +383,8 @@
 }
 
 .form-input:focus {
-  border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
 }
 
 .form-input:disabled {
@@ -384,7 +393,7 @@
 }
 
 .form-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-muted);
 }
 
 .form-input-card {
@@ -421,30 +430,45 @@
 }
 
 .modal-btn-cancel {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
 }
 
 .modal-btn-cancel:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .modal-btn-submit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--accent-gradient);
   color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 15px var(--accent-glow);
 }
 
 .modal-btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  box-shadow: 0 6px 20px var(--accent-glow);
 }
 
-/* ========================================
-   PAYMENT OPTIONS
-======================================== */
+.modal-btn-withdraw-submit {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: var(--withdraw-gradient);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-btn-withdraw-submit:hover:not(:disabled) {
+  box-shadow: 0 4px 15px rgba(244, 63, 94, 0.45);
+  transform: translateY(-1px);
+}
+
 .payment-options {
   display: flex;
   gap: 12px;
@@ -457,20 +481,20 @@
   align-items: center;
   gap: 8px;
   padding: 15px 10px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border-color);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-card);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .payment-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-hover);
+  background: var(--bg-hover);
 }
 
 .payment-card-active {
-  border-color: rgba(102, 126, 234, 0.6);
+  border-color: var(--accent-primary);
   background: rgba(102, 126, 234, 0.1);
 }
 
@@ -489,14 +513,11 @@
 }
 
 .payment-name {
-  color: white;
+  color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
 }
 
-/* ========================================
-   PAYMENT SUMMARY
-======================================== */
 .payment-summary {
   background: rgba(102, 126, 234, 0.1);
   border: 1px solid rgba(102, 126, 234, 0.3);
@@ -517,33 +538,208 @@
 }
 
 .payment-summary-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
 .payment-summary-value {
-  color: white;
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 600;
 }
 
-/* ========================================
-   SECURITY BADGE
-======================================== */
+.withdraw-amount-highlight {
+  color: var(--withdraw);
+  font-weight: 700;
+  font-size: 16px;
+}
+
 .security-badge {
   margin-top: 15px;
   padding: 10px;
   background: rgba(74, 222, 128, 0.05);
   border: 1px solid rgba(74, 222, 128, 0.2);
   border-radius: 8px;
-  color: rgba(74, 222, 128, 0.9);
+  color: var(--success);
   font-size: 12px;
   text-align: center;
 }
 
-/* ========================================
-   RESPONSIVE
-======================================== */
+.quick-amounts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: -4px;
+}
+
+.quick-amount-btn {
+  flex: 1;
+  min-width: 60px;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.quick-amount-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.currency-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.currency-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.currency-item:hover:not(.currency-item-disabled) {
+  border-color: var(--border-hover);
+  background: var(--bg-hover);
+}
+
+.currency-item-active {
+  border-color: var(--accent-primary);
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.currency-item-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.currency-symbol {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.currency-info {
+  flex: 1;
+}
+
+.currency-code {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.currency-name {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.currency-badge {
+  background: rgba(74, 222, 128, 0.2);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  color: var(--success);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.recipient-search-wrapper {
+  position: relative;
+}
+
+.search-spinner {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+.recipient-results {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.recipient-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.recipient-item:hover {
+  background: var(--bg-hover);
+}
+
+.recipient-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.recipient-info {
+  flex: 1;
+}
+
+.recipient-email {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.recipient-name {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
 @media (max-width: 768px) {
   .content-wrapper {
     flex-direction: column;
@@ -569,242 +765,4 @@
   .form-row {
     grid-template-columns: 1fr;
   }
-}
-
-/* ========================================
-   CURRENCY LIST
-======================================== */
-.currency-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.currency-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.currency-item:hover:not(.currency-item-disabled) {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.currency-item-active {
-  border-color: rgba(102, 126, 234, 0.6);
-  background: rgba(102, 126, 234, 0.1);
-}
-
-.currency-item-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.currency-symbol {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.currency-info {
-  flex: 1;
-}
-
-.currency-code {
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.currency-name {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 12px;
-}
-
-.currency-badge {
-  background: rgba(74, 222, 128, 0.2);
-  border: 1px solid rgba(74, 222, 128, 0.3);
-  color: rgba(74, 222, 128, 0.9);
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-/* ========================================
-   RECIPIENT SEARCH
-======================================== */
-.recipient-search-wrapper {
-  position: relative;
-}
-
-.search-spinner {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 16px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: translateY(-50%) rotate(0deg); }
-  to { transform: translateY(-50%) rotate(360deg); }
-}
-
-.recipient-results {
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0;
-  right: 0;
-  background: rgba(17, 24, 39, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.recipient-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 15px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.recipient-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.recipient-avatar {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 600;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.recipient-info {
-  flex: 1;
-}
-
-.recipient-email {
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.recipient-name {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 12px;
-}
-
-/* ── Кнопка виведення на картці гаманця ── */
-.wallet-btn-withdraw {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid rgba(251, 113, 133, 0.4);
-  background: rgba(251, 113, 133, 0.12);
-  color: #fb7185;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.wallet-btn-withdraw:hover:not(:disabled) {
-  background: rgba(251, 113, 133, 0.22);
-  border-color: rgba(251, 113, 133, 0.6);
-}
-
-.wallet-btn-withdraw:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-/* ── Кнопка підтвердження виведення в модалці ── */
-.modal-btn-withdraw-submit {
-  flex: 1;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.modal-btn-withdraw-submit:hover:not(:disabled) {
-  box-shadow: 0 4px 15px rgba(244, 63, 94, 0.45);
-  transform: translateY(-1px);
-}
-
-.modal-btn-withdraw-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* ── Підсвічування суми виведення ── */
-.withdraw-amount-highlight {
-  color: #fb7185;
-  font-weight: 700;
-  font-size: 16px;
-}
-
-/* ── Кнопки швидкого вибору суми ── */
-.quick-amounts {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: -4px;
-}
-
-.quick-amount-btn {
-  flex: 1;
-  min-width: 60px;
-  padding: 8px 6px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.quick-amount-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: white;
 }
