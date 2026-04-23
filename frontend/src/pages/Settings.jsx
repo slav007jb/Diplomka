@@ -8,6 +8,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import { Particles } from '../components/Particles';
 import '../css/Settings.css';
 
+
 function Settings() {
   const { currentTheme, cycleTheme, theme } = useTheme();
   const { user, signOut } = useAuth();
@@ -32,6 +33,13 @@ function Settings() {
   const [twoFAEnabled, setTwoFAEnabled] = useState(false);
   const [activeSection, setActiveSection] = useState('profile');
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [twoFAFactors, setTwoFAFactors] = useState([]);
+  const [isEnrolling, setIsEnrolling] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const [secret, setSecret] = useState('');
+  const [verifyCode, setVerifyCode] = useState('');
+  const [factorId, setFactorId] = useState('');
+  const [qrCodeSvg, setQrCodeSvg] = useState('');
 
   useEffect(() => {
     if (!user) {
@@ -69,9 +77,51 @@ function Settings() {
     }
   };
 
-  const checkTwoFA = () => {
-    const saved = localStorage.getItem('2fa_enabled');
-    setTwoFAEnabled(saved === 'true');
+  const checkTwoFA = async () => {
+    try {
+      const { data, error } = await supabase.auth.mfa.listFactors();
+      if (error) throw error;
+      
+      const verified = data.totp.filter(f => f.status === 'verified');
+      setTwoFAFactors(verified);
+      setTwoFAEnabled(verified.length > 0);
+    } catch (error) {
+      console.error('Error checking 2FA:', error);
+    }
+  };
+
+  const verify2FACode = async () => {
+    if (!verifyCode || verifyCode.length !== 6) {
+      setMessage({ type: 'error', text: 'Введіть 6-значний код з додатка' });
+      return;
+    }
+  
+    setLoading(true);
+    try {
+      const { data: challengeData, error: challengeError } = 
+        await supabase.auth.mfa.challenge({ factorId });
+      
+      if (challengeError) throw challengeError;
+  
+      const { error: verifyError } = await supabase.auth.mfa.verify({
+        factorId,
+        challengeId: challengeData.id,
+        code: verifyCode
+      });
+  
+      if (verifyError) throw verifyError;
+  
+      setMessage({ type: 'success', text: '2FA успішно увімкнено!' });
+      setIsEnrolling(false);
+      setVerifyCode('');
+      setQrCodeUrl('');
+      setSecret('');
+      await checkTwoFA();
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Невірний код. Спробуйте ще раз' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const updateProfile = async (e) => {
@@ -98,6 +148,11 @@ function Settings() {
   const changePassword = async (e) => {
     e.preventDefault();
     
+    if (!passwordData.current_password) {
+      setMessage({ type: 'error', text: 'Введіть поточний пароль' });
+      return;
+    }
+    
     if (passwordData.new_password !== passwordData.confirm_password) {
       setMessage({ type: 'error', text: 'Паролі не співпадають' });
       return;
@@ -107,16 +162,34 @@ function Settings() {
       setMessage({ type: 'error', text: 'Пароль має бути не менше 6 символів' });
       return;
     }
-
+  
+    if (passwordData.current_password === passwordData.new_password) {
+      setMessage({ type: 'error', text: 'Новий пароль не може співпадати з поточним' });
+      return;
+    }
+  
     setLoading(true);
     setMessage({ type: '', text: '' });
-
+  
     try {
-      const { error } = await supabase.auth.updateUser({
+      // Крок 1: Перевіряємо поточний пароль через спробу входу
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: passwordData.current_password
+      });
+  
+      if (signInError) {
+        setMessage({ type: 'error', text: 'Невірний поточний пароль' });
+        setLoading(false);
+        return;
+      }
+  
+      // Крок 2: Оновлюємо пароль
+      const { error: updateError } = await supabase.auth.updateUser({
         password: passwordData.new_password
       });
-
-      if (error) throw error;
+  
+      if (updateError) throw updateError;
       
       setMessage({ type: 'success', text: 'Пароль успішно змінено!' });
       setPasswordData({
@@ -144,6 +217,59 @@ function Settings() {
     localStorage.setItem('2fa_enabled', newValue.toString());
     setMessage({ type: 'success', text: newValue ? '2FA увімкнено!' : '2FA вимкнено!' });
     setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+  };
+
+  const startEnroll2FA = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.mfa.enroll({
+        factorType: 'totp',
+        friendlyName: `PaymentApp-${Date.now()}`
+      });
+  
+      if (error) throw error;
+  
+      setFactorId(data.id);
+      setQrCodeUrl(data.totp.uri);
+      setQrCodeSvg(data.totp.qr_code);  // ← додав цей рядок
+      setSecret(data.totp.secret);
+      setIsEnrolling(true);
+    } catch (error) {
+      setMessage({ type: 'error', text: error.message });
+      console.error('Enroll error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cancelEnroll = async () => {
+    if (factorId) {
+      await supabase.auth.mfa.unenroll({ factorId });
+    }
+    setIsEnrolling(false);
+    setVerifyCode('');
+    setQrCodeUrl('');
+    setSecret('');
+    setFactorId('');
+  };
+
+  const disable2FA = async () => {
+    if (!confirm('Ви впевнені що хочете вимкнути двофакторну автентифікацію?')) return;
+    
+    setLoading(true);
+    try {
+      for (const factor of twoFAFactors) {
+        const { error } = await supabase.auth.mfa.unenroll({ factorId: factor.id });
+        if (error) throw error;
+      }
+      
+      setMessage({ type: 'success', text: '2FA вимкнено' });
+      await checkTwoFA();
+    } catch (error) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSignOut = async () => {
@@ -313,24 +439,116 @@ function Settings() {
                   <div className="settings-divider"></div>
 
                   <div className="settings-section">
-                    <div className="settings-twofa">
-                      <div className="settings-twofa-info">
-                        <h3 className="settings-section-title">Двофакторна автентифікація (2FA)</h3>
-                        <p className="settings-twofa-description">
-                          Додатковий рівень захисту вашого акаунту. Після увімкнення 2FA, 
-                          при вході потрібно буде вводити код з додатку-автентифікатора.
-                        </p>
+                  <h3 className="settings-section-title">Двофакторна автентифікація (2FA)</h3>
+                  <p className="settings-twofa-description">
+                    Додатковий рівень захисту акаунту. Після увімкнення 2FA при вході 
+                    потрібно буде вводити 6-значний код з додатка-автентифікатора 
+                    (Google Authenticator, Authy, Microsoft Authenticator).
+                  </p>
+
+                  {!isEnrolling && !twoFAEnabled && (
+                    <button 
+                      onClick={startEnroll2FA} 
+                      disabled={loading}
+                      className="settings-btn settings-btn-primary"
+                    >
+                      {loading ? 'Налаштування...' : 'Увімкнути 2FA'}
+                    </button>
+                  )}
+
+                  {!isEnrolling && twoFAEnabled && (
+                    <div>
+                      <div className="settings-2fa-enabled">
+                        <span style={{ color: '#4ade80', fontSize: '14px' }}>
+                          ✓ Двофакторна автентифікація увімкнена
+                        </span>
                       </div>
-                      <button
-                        onClick={toggleTwoFA}
-                        className={`settings-toggle ${twoFAEnabled ? 'active' : ''}`}
+                      <button 
+                        onClick={disable2FA} 
+                        disabled={loading}
+                        className="settings-btn settings-btn-danger"
+                        style={{ marginTop: '12px' }}
                       >
-                        {twoFAEnabled ? 'Увімкнено' : 'Вимкнено'}
+                        Вимкнути 2FA
                       </button>
                     </div>
-                  </div>
+                  )}
+
+                  {isEnrolling && (
+                    <div className="settings-2fa-enroll">
+                      <div className="settings-2fa-step">
+                        <h4>Крок 1: Відскануйте QR-код</h4>
+                        <p>Відкрийте додаток Google Authenticator та відскануйте код:</p>
+                        {qrCodeSvg && (
+                        <div style={{ 
+                          background: 'white', 
+                          padding: '16px', 
+                          borderRadius: '8px',
+                          width: 'fit-content',
+                          margin: '16px 0'
+                        }}>
+                          <img 
+                            src={qrCodeSvg} 
+                            alt="QR Code для 2FA" 
+                            style={{ width: 200, height: 200 }} 
+                          />
+                        </div>
+                      )}
+                        
+                        <p style={{ fontSize: '13px', color: '#888' }}>
+                          Не можете відсканувати? Введіть код вручну:
+                        </p>
+                        <code style={{ 
+                          display: 'block',
+                          background: 'rgba(255,255,255,0.05)',
+                          padding: '10px',
+                          borderRadius: '6px',
+                          fontSize: '13px',
+                          wordBreak: 'break-all',
+                          marginBottom: '16px'
+                        }}>
+                          {secret}
+                        </code>
+                      </div>
+
+                      <div className="settings-2fa-step">
+                        <h4>Крок 2: Введіть 6-значний код</h4>
+                        <input
+                          type="text"
+                          value={verifyCode}
+                          onChange={(e) => setVerifyCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          placeholder="000000"
+                          maxLength={6}
+                          className="settings-input"
+                          style={{ 
+                            fontSize: '20px', 
+                            letterSpacing: '8px', 
+                            textAlign: 'center',
+                            fontFamily: 'monospace'
+                          }}
+                        />
+                        <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
+                          <button 
+                            onClick={verify2FACode}
+                            disabled={loading || verifyCode.length !== 6}
+                            className="settings-btn settings-btn-primary"
+                          >
+                            {loading ? 'Перевірка...' : 'Підтвердити'}
+                          </button>
+                          <button 
+                            onClick={cancelEnroll}
+                            className="settings-btn settings-btn-secondary"
+                          >
+                            Скасувати
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 </>
-              )}
+              )
+              }
 
               {activeSection === 'notifications' && (
                 <>
@@ -408,8 +626,8 @@ function Settings() {
                     >
                       <div className="settings-theme-preview theme-dark-preview"></div>
                       <div className="settings-theme-info">
-                        <div className="settings-theme-name">🌙 Тёмная</div>
-                        <div className="settings-theme-desc">Классическая тёмная тема</div>
+                        <div className="settings-theme-name">🌙 Нічна</div>
+                        <div className="settings-theme-desc">Класична нічна тема</div>
                       </div>
                       {theme === 'dark' && <div className="settings-theme-check">✓</div>}
                     </div>
@@ -420,8 +638,8 @@ function Settings() {
                     >
                       <div className="settings-theme-preview theme-gray-preview"></div>
                       <div className="settings-theme-info">
-                        <div className="settings-theme-name">🌫️ Серая</div>
-                        <div className="settings-theme-desc">Спокойная серая тема</div>
+                        <div className="settings-theme-name">🌫️ Сіра</div>
+                        <div className="settings-theme-desc">Спокійна сіра тема</div>
                       </div>
                       {theme === 'gray' && <div className="settings-theme-check">✓</div>}
                     </div>
