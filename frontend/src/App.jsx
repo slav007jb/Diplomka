@@ -7,8 +7,6 @@ import History from './pages/History';
 import Crypto from './pages/Crypto';
 import Settings from './pages/Settings';
 
-
-
 function App() {
   return (
     <BrowserRouter>

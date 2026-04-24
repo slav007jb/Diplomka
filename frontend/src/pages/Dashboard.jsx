@@ -332,7 +332,7 @@ function Dashboard() {
 
       <div className="dashboard-container">
         <motion.nav variants={navbarVariants} initial="hidden" animate="visible" className="navbar">
-          <div className="navbar-logo">PaymentApp</div>
+          <div className="navbar-logo">Currex</div>
           <div className="navbar-avatar" onClick={handleSignOut} title="Вийти">
             {user?.email?.charAt(0).toUpperCase() || 'A'}
           </div>
