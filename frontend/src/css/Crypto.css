@@ -1193,3 +1193,60 @@ transform: translateY(-1px);
 .impersonation-banner { gap: 8px; }
 .impersonation-text { font-size: 12px; }
 }
+
+
+.setup-required-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(123, 140, 222, 0.15), rgba(90, 111, 216, 0.1));
+  border: 1px solid rgba(123, 140, 222, 0.3);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.setup-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.setup-text {
+  flex: 1;
+}
+
+.setup-text strong {
+  display: block;
+  color: #ffffff;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.setup-text p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  margin: 0;
+}
+
+.setup-action-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #7b8cde, #5a6fd8);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s;
+}
+
+.setup-action-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Заблокована кнопка купівлі */
+.buy-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

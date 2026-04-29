@@ -300,8 +300,21 @@ function Crypto() {
   // ══════════════════════════════════════════════════════════════════════════════
   // КУПІВЛЯ
   // ══════════════════════════════════════════════════════════════════════════════
-  const openBuyModal  = (coin) => { setSelectedCoin(coin); setBuyAmountUsd(''); setIsBuyModalOpen(true); };
-  const closeBuyModal = () => { setIsBuyModalOpen(false); setSelectedCoin(null); setBuyAmountUsd(''); };
+  const openBuyModal = (coin) => {
+    // Перевірка наявності хоча б одного криптогаманця
+    if (cryptoWallets.length === 0) {
+      alert('Спочатку створіть криптогаманець (Bitcoin або Ethereum) щоб мати можливість купувати криптовалюту');
+      return;
+    }
+    setSelectedCoin(coin);
+    setBuyAmountUsd('');
+    setIsBuyModalOpen(true);
+  };
+  const closeBuyModal = () => { 
+    setIsBuyModalOpen(false); 
+    setSelectedCoin(null); 
+    setBuyAmountUsd(''); 
+  };
   const calcCryptoAmount = () => {
     if (!selectedCoin || !buyAmountUsd || !prices[selectedCoin.id]) return 0;
     return parseFloat(buyAmountUsd) / prices[selectedCoin.id].usd;
@@ -565,6 +578,29 @@ function Crypto() {
             )}
           </div>
 
+          {!impersonated && cryptoWallets.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="setup-required-banner"
+            >
+              <span className="setup-icon">🔐</span>
+              <div className="setup-text">
+                <strong>Створіть криптогаманець для початку торгівлі</strong>
+                <p>Щоб купувати та продавати криптовалюту, спочатку потрібно створити Bitcoin або Ethereum гаманець</p>
+              </div>
+              <button 
+                className="setup-action-btn"
+                onClick={() => {
+                  document.querySelector('.generate-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Створити гаманець ↓
+              </button>
+            </motion.div>
+          )}
+
+
           {/* ── РИНОК ── */}
           <section className="crypto-market-section">
             <div className="market-header">
@@ -604,10 +640,11 @@ function Crypto() {
                     <motion.button
                       whileTap={{ scale: 0.95 }}
                       onClick={() => openBuyModal(coin)}
-                      disabled={!priceData}
+                      disabled={!priceData || cryptoWallets.length === 0}
                       className="buy-btn"
+                      title={cryptoWallets.length === 0 ? 'Спочатку створіть криптогаманець' : ''}
                     >
-                      Купити
+                      {cryptoWallets.length === 0 ? '🔒 Купити' : 'Купити'}
                     </motion.button>
                   </motion.div>
                 );
