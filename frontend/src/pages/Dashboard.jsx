@@ -211,35 +211,71 @@ function Dashboard() {
   const handleTransfer = async (e) => {
     e.preventDefault();
     const amount = parseFloat(transferData.amount);
-    if (!transferData.recipientEmail) { alert('Введіть email отримувача'); return; }
-    if (transferData.recipientEmail === user.email) { alert('Не можна відправити кошти самому собі'); return; }
-    if (!amount || amount <= 0) { alert('Введіть коректну суму'); return; }
-    if (amount > parseFloat(transferData.fromWallet.balance)) { alert('Недостатньо коштів на балансі'); return; }
+    
+    if (!transferData.recipientEmail) { 
+      alert('Введіть email отримувача'); return; 
+    }
+    if (transferData.recipientEmail === user.email) { 
+      alert('Не можна відправити кошти самому собі'); return; 
+    }
+    if (!amount || amount <= 0) { 
+      alert('Введіть коректну суму'); return; 
+    }
+    if (amount > parseFloat(transferData.fromWallet.balance)) { 
+      alert('Недостатньо коштів на балансі'); return; 
+    }
+    
     setTransferLoading(true);
     try {
-      const { data: recipientProfiles, error: rErr } = await supabase.from('profiles').select('id, email').eq('email', transferData.recipientEmail);
+      // Знайти отримувача за email
+      const { data: recipientProfiles, error: rErr } = await supabase
+        .from('profiles')
+        .select('id, email')
+        .eq('email', transferData.recipientEmail);
+      
       if (rErr) throw rErr;
-      if (!recipientProfiles?.length) { alert('Отримувача не знайдено'); return; }
+      if (!recipientProfiles?.length) { 
+        alert('Отримувача не знайдено'); 
+        return; 
+      }
+      
       const recipient = recipientProfiles[0];
-      if (recipient.id === user.id) { alert('Не можна відправити кошти самому собі'); return; }
-      const { data: rWallets, error: wErr } = await supabase.from('wallets').select('*').eq('user_id', recipient.id).eq('currency', transferData.fromWallet.currency);
+      if (recipient.id === user.id) { 
+        alert('Не можна відправити кошти самому собі'); 
+        return; 
+      }
+      
+      // Знайти гаманець отримувача в потрібній валюті
+      const { data: rWallets, error: wErr } = await supabase
+        .from('wallets')
+        .select('id')
+        .eq('user_id', recipient.id)
+        .eq('currency', transferData.fromWallet.currency);
+      
       if (wErr) throw wErr;
-      if (!rWallets?.length) { alert(`У отримувача немає гаманця ${transferData.fromWallet.currency}`); return; }
-      const rWallet = rWallets[0];
-      const newSender = parseFloat(transferData.fromWallet.balance) - amount;
-      const newReceiver = parseFloat(rWallet.balance) + amount;
-      const { error: e1 } = await supabase.from('wallets').update({ balance: newSender }).eq('id', transferData.fromWallet.id);
-      if (e1) throw e1;
-      const { error: e2 } = await supabase.from('wallets').update({ balance: newReceiver }).eq('id', rWallet.id);
-      if (e2) throw e2;
-      await supabase.from('transactions').insert([{ sender_id: user.id, receiver_id: recipient.id, amount, currency: transferData.fromWallet.currency, type: 'transfer', status: 'completed' }]);
-      setWallets(wallets.map(w => w.id === transferData.fromWallet.id ? { ...w, balance: newSender } : w));
+      if (!rWallets?.length) { 
+        alert(`У отримувача немає гаманця ${transferData.fromWallet.currency}`); 
+        return; 
+      }
+      
+      // Виклик атомарної функції в БД через RPC
+      const { error: rpcError } = await supabase.rpc('transfer_money', {
+        sender_wallet_id: transferData.fromWallet.id,
+        receiver_wallet_id: rWallets[0].id,
+        transfer_amount: amount
+      });
+      
+      if (rpcError) throw rpcError;
+      
       closeTransferModal();
       alert(`Переказ ${amount} ${getCurrencySymbol(transferData.fromWallet.currency)} успішно виконано`);
       await fetchWallets();
+      
     } catch (err) {
       alert('Помилка переказу: ' + (err.message || 'Невідома помилка'));
-    } finally { setTransferLoading(false); }
+    } finally { 
+      setTransferLoading(false); 
+    }
   };
 
   // ── Форматування ──────────────────────────────────────────────────────────
